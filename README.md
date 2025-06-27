@@ -3,7 +3,7 @@
 
 텍스트를 입력하면 감정 흐름을 분석해, 해당 분위기에 맞는 음악을 생성하고 결합하여 완성된 트랙을 제공합니다.
 
-- 감정 기반 문장 분할 (감정 청킹)
+- 감정 기반 문장 분할 및 문장의 감정선 분석 (감정 청킹)
 - LLM 기반 음악 프롬프트 생성 (global + regional)
 - Meta MusicGen으로 음악 생성
 - FastAPI로 API 구성, Swagger UI 제공
@@ -40,11 +40,10 @@ a. curl -fsSL https://ollama.com/install.sh | sh
 b. ollama_run.py 파일 실행해서 ollama 서버 오픈
 c. ollama pull llama3.2 실행 후 모델 다운로드 + gemma3:4b 모델도 다운로드
 
-# 3. 서버 실행 (변경 가능성 있음)
-uvicorn main:app --host 0.0.0.0 --port 8000 --reload --root-path /proxy/8000
+# 3. 서버 실행
+로컬, 클라우드 서비스에 따라 다르게 실행
 
-# 4. Swagger UI 접속
-http://localhost:8000/docs
+# 4. 배포
 ```
 
 ---
@@ -60,7 +59,14 @@ http://localhost:8000/docs
 ├── services/
 │   ├── prompt_service.py
 │   ├── musicgen_service.py
+│   ├── analyze_emotions_with_gpt.py
+│   ├── chunk_text_by_emotion.py
+│   ├── ebooks2text.py
 │   ├── emotion_service.py
+│   ├── find_turning_points_in_text.py
+│   ├── get_emotion_analysis_prompt.py
+│   ├── sanitize_llm_output.py
+│   ├── split_text.py
 │   └── merge_service.py
 ├── utils/
 │   └── file_utils.py
@@ -73,7 +79,7 @@ http://localhost:8000/docs
 
 ## 📡 API 개요
 
-### POST /generate/music
+### POST /generate/music-v3
 - .txt 파일 업로드
 - 음악 생성 → 병합
 - 응답으로 다운로드 링크 반환
@@ -88,7 +94,13 @@ http://localhost:8000/docs
 - 사용자별 세션 구분 및 저장 분리
 - PDF파일 처리, 챕터별 다운로드 API 구분
 - 음악 생성 비동기 처리 ( 최적화 ) 
-- Dokerlize
+
+2025/05/14 
+베타 테스트
+버그 픽스
+
+2025/05/26
+데모데이 서비스 배포
 
 ---
 
